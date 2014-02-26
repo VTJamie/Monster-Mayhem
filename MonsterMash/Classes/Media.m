@@ -30,6 +30,12 @@ static NSMutableDictionary *sounds = NULL;
     return [atlas textureByName:name];
 }
 
++ (SPImage *) atlasImage:(NSString *) name
+{
+    if (!atlas) [self initAtlas];
+    return [[SPImage alloc] initWithTexture:[atlas textureByName:name]];
+}
+
 + (NSArray *)atlasTexturesWithPrefix:(NSString *)prefix
 {
     if (!atlas) [self initAtlas];

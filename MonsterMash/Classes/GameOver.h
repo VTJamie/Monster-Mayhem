@@ -11,10 +11,10 @@
 
 @interface GameOver : SPSprite
 
-- (id) initWithStatus: (BOOL) won;
+- (id) initWithScore: (int) score;
 
 @property (nonatomic, retain) SPTextField* gameOverText;
-@property (nonatomic, assign) BOOL won;
+@property (nonatomic, assign) int score;
 - (void) setup;
 
 @end

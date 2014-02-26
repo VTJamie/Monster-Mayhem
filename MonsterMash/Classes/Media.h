@@ -11,6 +11,7 @@
 + (void)releaseAtlas;
 
 + (SPTexture *)atlasTexture:(NSString *)name;
++ (SPImage *) atlasImage:(NSString *) name;
 + (NSArray *)atlasTexturesWithPrefix:(NSString *)prefix;
 
 + (void)initSound;

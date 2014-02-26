@@ -28,7 +28,6 @@
     {
         gameInstance = self;
         self.gameJuggler = [SPJuggler juggler];
-        self.menuJuggler = [SPJuggler juggler];
         [self setup];
     }
     
@@ -51,6 +50,16 @@
     //  [Media initSound];      // loads all your sounds    -> see Media.h/Media.m
     
     [self showStartMenu];
+    
+    [self addEventListener:@selector(onEnterFrame:) atObject:self forType:SP_EVENT_TYPE_ENTER_FRAME];
+}
+
+- (void) onEnterFrame: (SPEnterFrameEvent*) event
+{
+    if (self.playarea == nil || !self.playarea.gameover)
+    {
+        [self.gameJuggler advanceTime:event.passedTime];
+    }
 }
 
 - (void) startGame
@@ -71,12 +80,12 @@
     [self.startmenu setup];
 }
 
-- (void) showGameOver: (BOOL) win
+- (void) showGameOver: (int) score
 {
     [self removeAllChildren];
     self.playarea = nil;
         self.startmenu = nil;
-    self.gameover = [[GameOver alloc] initWithStatus: win];
+    self.gameover = [[GameOver alloc] initWithScore:score];
     [self addChild:self.gameover];
     [self.gameover setup];
 }

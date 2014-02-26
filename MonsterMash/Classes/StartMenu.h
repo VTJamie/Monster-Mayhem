@@ -11,7 +11,8 @@
 
 @interface StartMenu : SPSprite
 
-@property (nonatomic, retain) SPTextField* startTextButton;
+@property (nonatomic, retain) SPImage* newgame;
+@property (nonatomic, assign) double timepassed;
 
 - (void) setup;
 

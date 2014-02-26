@@ -22,7 +22,7 @@ void onUncaughtException(NSException *exception)
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+{    
     NSSetUncaughtExceptionHandler(&onUncaughtException);
     
     CGRect screenBounds = [UIScreen mainScreen].bounds;

@@ -7,7 +7,6 @@
 //
 
 #import "Background.h"
-#import "ZoomChangedEvent.h"
 
 @implementation Background
 
@@ -15,7 +14,7 @@
 {
     if ((self = [super init]))
     {
-        self.tiles = [[NSMutableArray alloc] init];
+
         [self setup];
     }
     return self;
@@ -28,91 +27,43 @@
 
 - (void)setup
 {
-    [self generateTiles];
-    [[Game instance].playarea addEventListener:@selector(onCenterChange:) atObject:self forType:EVENT_TYPE_NEW_CENTER_TRIGGERED];
-    [[Game instance].playarea addEventListener:@selector(onZoomChanged:) atObject:self forType:EVENT_TYPE_NEW_ZOOM];
-    
-}
-
-- (void) onZoomChanged: (ZoomChangedEvent*) zoomevent
-{
-    [self generateTiles];
-}
-
-- (void) generateTiles
-{
-    [self.tiles removeAllObjects];
-    [self removeAllChildren];
-    SPImage *tempimage = [[SPImage alloc] initWithTexture:[Media atlasTexture:@"stars"]];
-    double gamezoom = [Game instance].playarea.overallscale;
-    int gameWidth  = Sparrow.stage.width / gamezoom;
-    int gameHeight = Sparrow.stage.height / gamezoom;
-    int imageWidth = tempimage.width;
-    int imageHeight = tempimage.height;
 
     
-    int tileWidth = gameWidth / imageWidth/gamezoom + 2;
-    int tileHeight = gameHeight / imageHeight/gamezoom + 2;
-       NSLog(@"%d, %d : %d, %d", tileWidth, tileHeight, gameWidth, gameHeight);
     
-    for (int x = 0; x < tileWidth; x++)
+    SPImage* referencetile = [Media atlasImage:@"Grass"];
+    double numtilewide = Sparrow.stage.width / (referencetile.width-1) + 1;
+    double numtileheight = Sparrow.stage.height / (referencetile.height-1)  + 1;
+    double w = referencetile.width -1;
+    double h = referencetile.height -1;
+    
+    
+    for (int i = 0; i < numtilewide; i++)
     {
-        for (int y = 0; y < tileHeight; y++)
+        for (int j = 0; j < numtileheight; j++)
         {
-            SPImage* image = [[SPImage alloc] initWithTexture:[Media atlasTexture:@"stars"]];
-            image.pivotX = 0;
-            image.pivotY = 0;
-            image.x = -imageWidth - [Game instance].playarea.x - [Game instance].playarea.currentcenter.x + imageWidth * x;
-            image.y = -imageHeight - [Game instance].playarea.y - [Game instance].playarea.currentcenter.y + imageHeight * y;
-            [self.tiles addObject:image];
-            [self addChild:image];
+            SPImage* tile = [Media atlasImage:@"Grass"];
+            tile.x = i * w;
+            tile.y = j * h;
+            [self addChild:tile];
         }
     }
-}
-
-- (void) redrawTiles: (SPPoint*) centerchange {
-    double gamezoom = [Game instance].playarea.overallscale;
-    double gx = [Game instance].x;
-    double gy = [Game instance].y;
-    for (SPImage* image in self.tiles)
+    
+    SPImage* referencepinetree = [Media atlasImage:@"PineTree"];
+    double numtreewide = Sparrow.stage.width / referencepinetree.width+1;
+    
+    for ( int i = 0; i < numtreewide; i++)
     {
-        image.x -= centerchange.x;
-        image.y -= centerchange.y;
+        SPImage* tree = [Media atlasImage:@"PineTree"];
+        tree.x = i * tree.width;
+        tree.y = -25;
+        [self addChild:tree];
         
-        int x = image.x / gamezoom - gx;
-        int y = image.y / gamezoom - gy;
-        
-       // NSLog(@"%d, %d : %f, %f", x, y, gx, gy );
-        if (y > Sparrow.stage.height / gamezoom)
-        {
-         //   NSLog(@"%d, %f", y, Sparrow.stage.height);
-            image.y = -image.height + image.y - gx - Sparrow.stage.height / gamezoom;
-        }
-        
-        if (x > Sparrow.stage.width / gamezoom)
-        {
-            image.x = -image.width + image.x - gx - Sparrow.stage.width / gamezoom;
-        }
-        
-        if (x + image.width / gamezoom < 0)
-        {
-            image.x = Sparrow.stage.width / gamezoom + (image.x + image.width + gx);
-        }
-        
-        if (y + image.height / gamezoom < 0)
-        {
-            image.y = Sparrow.stage.height / gamezoom + (image.y + image.height + gx);
-        }
+        SPImage* tree2 = [Media atlasImage:@"PineTree"];
+        tree2.x = i * tree2.width;
+        tree2.y = Sparrow.stage.height - tree2.height;
+        [self addChild:tree2];
     }
+    
 }
-
-- (void) onCenterChange: (CenterChangeEvent*) event
-{
- //   [self generateTiles];
-    [self redrawTiles:event.change];
-}
-
-//- (void) onTouchBack
-
 
 @end

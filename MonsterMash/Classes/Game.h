@@ -22,7 +22,7 @@
 
 - (void) startGame;
 - (void) showStartMenu;
-- (void) showGameOver: (BOOL) win;
+- (void) showGameOver: (int) score;
 
 
 @end

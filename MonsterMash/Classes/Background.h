@@ -7,14 +7,8 @@
 //
 
 
-#import "CenterChangeEvent.h"
-
 @interface Background : SPSprite
 
 - (void)setup;
-
-- (void) onCenterChange: (CenterChangeEvent*) event;
-
-@property (nonatomic, retain) NSMutableArray* tiles;
 
 @end
